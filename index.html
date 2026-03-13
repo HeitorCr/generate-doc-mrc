@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gerador de Orçamento - Marcos Aparecido</title>
+    <title>Gerador de Orçamento Profissional</title>
     <link rel="stylesheet" href="style.css">
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -16,34 +16,45 @@
     <div class="main-wrapper">
         <div class="container">
             <header class="header-info">
-                <h2>MARCOS APARECIDO RODRIGUES</h2> [cite: 8]
-                <p>Avenida XV de Novembro, 1565 - São Carlos do Ivaí - PR [cite: 9]</p>
-                <p>Bairro: Conjunto Bela Vista - Fone: (44) 99723-1252 [cite: 10, 11]</p>
+                <h2>MARCOS APARECIDO RODRIGUES</h2>
+                <p>Avenida XV de Novembro, 1565 - São Carlos do Ivaí - PR</p>
+                <p>Bairro: Conjunto Bela Vista - Fone: (44) 99723-1252</p>
             </header>
 
-            <div class="form-grid">
-                <div class="input-box">
-                    <label>Cliente</label>
-                    <input type="text" id="nomeCliente" placeholder="Nome do cliente">
+            <section class="card-section">
+                <h3>Dados do Cliente</h3>
+                <div class="form-grid">
+                    <div class="input-box full">
+                        <label>Nome do Cliente</label>
+                        <input type="text" id="nomeCliente" placeholder="Nome completo">
+                    </div>
+                    <div class="input-box">
+                        <label>CPF / CNPJ</label>
+                        <input type="text" id="cpfCnpj" placeholder="000.000.000-00">
+                    </div>
+                    <div class="input-box">
+                        <label>Celular / Fone</label>
+                        <input type="text" id="celular" placeholder="(00) 00000-0000">
+                    </div>
+                    <div class="input-box full">
+                        <label>Cidade (Paraná)</label>
+                        <select id="cidade" style="width: 100%"></select>
+                    </div>
                 </div>
-                <div class="input-box">
-                    <label>Cidade (PR)</label>
-                    <select id="cidade" style="width: 100%"></select>
-                </div>
-            </div>
+            </section>
 
             <section class="items-area">
                 <div class="items-header">
                     <span>Itens do Orçamento</span>
-                    <button class="btn-add" onclick="adicionarLinha()">+ Adicionar Item</button>
+                    <button class="btn-add" onclick="adicionarLinha()">+ Item</button>
                 </div>
                 <table id="tabelaItens">
                     <thead>
                         <tr>
-                            <th style="width: 50%">PRODUTO</th>
-                            <th style="width: 15%">QTDE</th>
-                            <th style="width: 25%">VALOR</th>
-                            <th style="width: 10%"></th>
+                            <th>PRODUTO</th>
+                            <th style="width: 80px">QTDE</th>
+                            <th style="width: 130px">UNITÁRIO</th>
+                            <th style="width: 40px"></th>
                         </tr>
                     </thead>
                     <tbody id="corpoTabela"></tbody>
@@ -52,8 +63,8 @@
 
             <div class="footer-grid">
                 <div class="payment-selection">
-                    <label>Pagamento</label>
-                    <select id="metodoPagamento"> [cite: 18]
+                    <label>Forma de Pagamento</label>
+                    <select id="metodoPagamento">
                         <option value="PIX">PIX</option>
                         <option value="Dinheiro">Dinheiro</option>
                         <option value="Cartão de Crédito">Cartão de Crédito</option>
@@ -61,14 +72,24 @@
                     </select>
                 </div>
                 <div class="extra-fields">
-                    <input type="text" id="frete" class="money-input" placeholder="Frete (+)" onblur="calcularTotal()"> [cite: 23]
-                    <input type="text" id="desconto" class="money-input" placeholder="Desconto (-)" onblur="calcularTotal()"> [cite: 22]
+                    <div class="input-box">
+                        <label>Frete (+)</label>
+                        <input type="text" id="frete" class="money-input" placeholder="0,00" onblur="calcularTotal()">
+                    </div>
+                    <div class="input-box">
+                        <label>Desconto (-)</label>
+                        <input type="text" id="desconto" class="money-input" placeholder="0,00" onblur="calcularTotal()">
+                    </div>
                 </div>
             </div>
 
             <div class="action-footer">
-                <div class="total-text">Total: <span id="totalDisplay">R$ 0,00</span></div> [cite: 24]
-                <button class="btn-submit" onclick="gerarPDF()">Gerar Orçamento PDF</button>
+                <div class="total-area">
+                    <span class="total-label">Total Geral</span>
+                    <span id="totalDisplay">R$ 0,00</span>
+                    <button class="btn-sync" onclick="calcularTotal()" title="Recalcular Total">🔄</button>
+                </div>
+                <button class="btn-submit" onclick="gerarPDF()">Gerar PDF</button>
             </div>
         </div>
     </div>
