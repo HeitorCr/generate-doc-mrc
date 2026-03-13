@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gerador de Orçamento Profissional</title>
+    <title>Gerador de Orçamento - Marcos Aparecido</title>
     <link rel="stylesheet" href="style.css">
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -13,57 +13,73 @@
     <script src="https://unpkg.com/imask"></script>
 </head>
 <body>
-    <div class="main-wrapper">
-        <div class="container">
-            <header class="header-info">
-                <h2>MARCOS APARECIDO RODRIGUES</h2>
-                <p>Avenida XV de Novembro, 1565 - São Carlos do Ivaí - PR</p>
-                <p>Bairro: Conjunto Bela Vista - Fone: (44) 99723-1252</p>
-            </header>
+    <div class="container">
+        <header class="main-header">
+            <h1>MARCOS APARECIDO RODRIGUES</h1>
+            <p>Avenida XV de Novembro, 1565 - São Carlos do Ivaí - PR - CEP: 87770-000</p>
+            <p>Bairro: Conjunto Bela Vista - Fone: (44) 99723-1252</p>
+        </header>
 
-            <section class="card-section">
-                <h3>Dados do Cliente</h3>
-                <div class="form-grid">
-                    <div class="input-box full">
-                        <label>Nome do Cliente</label>
-                        <input type="text" id="nomeCliente" placeholder="Nome completo">
-                    </div>
-                    <div class="input-box">
-                        <label>CPF / CNPJ</label>
-                        <input type="text" id="cpfCnpj" placeholder="000.000.000-00">
-                    </div>
-                    <div class="input-box">
-                        <label>Celular / Fone</label>
-                        <input type="text" id="celular" placeholder="(00) 00000-0000">
-                    </div>
-                    <div class="input-box full">
-                        <label>Cidade (Paraná)</label>
-                        <select id="cidade" style="width: 100%"></select>
-                    </div>
+        <section class="card">
+            <h3>DADOS DO CLIENTE</h3>
+            <div class="input-group">
+                <label>Nome do Cliente</label>
+                <input type="text" id="nomeCliente" placeholder="Ex: Ercilio de Oliveira">
+            </div>
+            <div class="row">
+                <div class="input-group flex-1">
+                    <label>CPF / CNPJ</label>
+                    <input type="text" id="cpfCnpj">
                 </div>
-            </section>
+                <div class="input-group flex-1">
+                    <label>RG / IE</label>
+                    <input type="text" id="rgIe">
+                </div>
+            </div>
+            <div class="row">
+                <div class="input-group flex-1">
+                    <label>Celular</label>
+                    <input type="text" id="celular">
+                </div>
+                <div class="input-group flex-1">
+                    <label>Fone Fixo</label>
+                    <input type="text" id="foneFixo">
+                </div>
+            </div>
+            <div class="input-group">
+                <label>Endereço</label>
+                <input type="text" id="endereco" placeholder="Rua, Número, Bairro, CEP">
+            </div>
+            <div class="input-group">
+                <label>Cidade (PR)</label>
+                <select id="cidade" style="width: 100%"></select>
+            </div>
+        </section>
 
-            <section class="items-area">
-                <div class="items-header">
-                    <span>Itens do Orçamento</span>
-                    <button class="btn-add" onclick="adicionarLinha()">+ Item</button>
-                </div>
+        <section class="card">
+            <div class="card-header">
+                <h3>ITENS</h3>
+                <button class="btn-add" onclick="adicionarLinha()">+ Item</button>
+            </div>
+            <div class="table-container">
                 <table id="tabelaItens">
                     <thead>
                         <tr>
-                            <th>PRODUTO</th>
-                            <th style="width: 80px">QTDE</th>
-                            <th style="width: 130px">UNITÁRIO</th>
-                            <th style="width: 40px"></th>
+                            <th>Produto</th>
+                            <th style="width: 60px">Qtd</th>
+                            <th style="width: 110px">Valor</th>
+                            <th style="width: 30px"></th>
                         </tr>
                     </thead>
                     <tbody id="corpoTabela"></tbody>
                 </table>
-            </section>
+            </div>
+        </section>
 
-            <div class="footer-grid">
-                <div class="payment-selection">
-                    <label>Forma de Pagamento</label>
+        <section class="card no-border">
+            <div class="row">
+                <div class="input-group flex-1">
+                    <label>Pagamento</label>
                     <select id="metodoPagamento">
                         <option value="PIX">PIX</option>
                         <option value="Dinheiro">Dinheiro</option>
@@ -71,27 +87,27 @@
                         <option value="Cartão de Débito">Cartão de Débito</option>
                     </select>
                 </div>
-                <div class="extra-fields">
-                    <div class="input-box">
-                        <label>Frete (+)</label>
-                        <input type="text" id="frete" class="money-input" placeholder="0,00" onblur="calcularTotal()">
-                    </div>
-                    <div class="input-box">
-                        <label>Desconto (-)</label>
-                        <input type="text" id="desconto" class="money-input" placeholder="0,00" onblur="calcularTotal()">
-                    </div>
+                <div class="input-group flex-1">
+                    <label>Frete (+)</label>
+                    <input type="text" id="frete" class="money" onblur="calcularTotal()">
+                </div>
+                <div class="input-group flex-1">
+                    <label>Desconto (-)</label>
+                    <input type="text" id="desconto" class="money" onblur="calcularTotal()">
                 </div>
             </div>
+        </section>
 
-            <div class="action-footer">
-                <div class="total-area">
-                    <span class="total-label">Total Geral</span>
+        <footer class="final-actions">
+            <div class="total-box">
+                <small>TOTAL GERAL</small>
+                <div class="total-row">
                     <span id="totalDisplay">R$ 0,00</span>
-                    <button class="btn-sync" onclick="calcularTotal()" title="Recalcular Total">🔄</button>
+                    <button class="btn-refresh" onclick="calcularTotal()">🔄</button>
                 </div>
-                <button class="btn-submit" onclick="gerarPDF()">Gerar PDF</button>
             </div>
-        </div>
+            <button class="btn-pdf" onclick="gerarPDF()">Gerar PDF</button>
+        </footer>
     </div>
     <script src="script.js"></script>
 </body>
