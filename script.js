@@ -41,13 +41,15 @@ function calcularTotal() {
     const desc = parseMoeda(document.getElementById('desconto').value);
     const total = sub + frete - desc;
     document.getElementById('totalDisplay').innerText = total.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+    return { sub, frete, desc, total };
 }
 
 function gerarPDF() {
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF();
+    const valores = calcularTotal();
     
-    // Header conforme Document.pdf
+    // Cabeçalho
     doc.setFontSize(14).setFont(undefined, 'bold');
     doc.text("MARCOS APARECIDO RODRIGUES", 105, 15, { align: "center" });
     doc.setFontSize(9).setFont(undefined, 'normal');
@@ -55,7 +57,7 @@ function gerarPDF() {
     doc.text("Bairro: Conjunto Bela Vista - Fone: (44) 99723-1252", 105, 26, { align: "center" });
     doc.line(15, 30, 195, 30);
 
-    // Cliente
+    // Dados do Cliente
     doc.setFontSize(10).setFont(undefined, 'bold');
     doc.text(`Cliente: ${document.getElementById('nomeCliente').value}`, 15, 40);
     doc.setFont(undefined, 'normal');
@@ -65,30 +67,57 @@ function gerarPDF() {
     doc.text(`Cidade: ${document.getElementById('cidade').value} - PR`, 15, 64);
     doc.text(`Emissão: ${new Date().toLocaleDateString('pt-BR')}`, 150, 40);
 
+    // Tabela de Itens
     const rows = [];
     document.querySelectorAll('#corpoTabela tr').forEach(tr => {
         const i = tr.querySelectorAll('input');
-        const t = (parseFloat(i[1].value) || 0) * parseMoeda(i[2].value);
-        rows.push([i[0].value, i[1].value, i[2].value, t.toLocaleString('pt-BR', {style:'currency', currency:'BRL'})]);
+        const unit = parseMoeda(i[2].value);
+        const qtd = parseFloat(i[1].value) || 0;
+        const totalItem = qtd * unit;
+        rows.push([
+            i[0].value, 
+            qtd, 
+            unit.toLocaleString('pt-BR', {style:'currency', currency:'BRL'}), 
+            totalItem.toLocaleString('pt-BR', {style:'currency', currency:'BRL'})
+        ]);
     });
 
     doc.autoTable({
         startY: 70,
-        head: [['PRODUTO', 'QTDE', 'VALOR', 'TOTAL']],
+        head: [['PRODUTO', 'QTDE', 'VALOR UNIT.', 'TOTAL']],
         body: rows,
         theme: 'grid',
         styles: { cellPadding: 4, fontSize: 9 },
         headStyles: { fillColor: [40, 40, 40] }
     });
 
+    // Seção de Totais e Pagamento
     let finalY = doc.lastAutoTable.finalY + 10;
-    doc.setFont(undefined, 'bold');
-    doc.text(`SUB-TOTAL: ${document.getElementById('totalDisplay').innerText}`, 140, finalY);
-    doc.text(`TOTAL: ${document.getElementById('totalDisplay').innerText}`, 140, finalY + 10);
+    
+    doc.setFontSize(10).setFont(undefined, 'bold');
+    doc.text("DETALHES DO PAGAMENTO", 15, finalY);
+    doc.setFont(undefined, 'normal');
+    doc.text(`Forma de Pagamento: ${document.getElementById('metodoPagamento').value}`, 15, finalY + 7);
 
-    doc.line(15, finalY + 30, 90, finalY + 30);
+    // Alinhamento à direita para os valores
+    const xValor = 140;
+    doc.text(`SUB-TOTAL:`, xValor, finalY);
+    doc.text(`${valores.sub.toLocaleString('pt-BR', {style:'currency', currency:'BRL'})}`, 195, finalY, {align: 'right'});
+    
+    doc.text(`FRETE (+):`, xValor, finalY + 7);
+    doc.text(`${valores.frete.toLocaleString('pt-BR', {style:'currency', currency:'BRL'})}`, 195, finalY + 7, {align: 'right'});
+    
+    doc.text(`DESCONTO (-):`, xValor, finalY + 14);
+    doc.text(`${valores.desc.toLocaleString('pt-BR', {style:'currency', currency:'BRL'})}`, 195, finalY + 14, {align: 'right'});
+    
+    doc.setFont(undefined, 'bold').setFontSize(12);
+    doc.text(`TOTAL GERAL:`, xValor, finalY + 24);
+    doc.text(`${valores.total.toLocaleString('pt-BR', {style:'currency', currency:'BRL'})}`, 195, finalY + 24, {align: 'right'});
+
+    // Assinatura
+    doc.line(15, finalY + 45, 90, finalY + 45);
     doc.setFontSize(8).setFont(undefined, 'normal');
-    doc.text("Responsável pelo recebimento", 15, finalY + 35);
+    doc.text("Responsável pelo recebimento", 15, finalY + 50);
 
     doc.save(`Orcamento_${document.getElementById('nomeCliente').value || 'Cliente'}.pdf`);
 }
