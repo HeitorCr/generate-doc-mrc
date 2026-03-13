@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gerador de Orçamentos - Marcos Aparecido</title>
+    <title>Gerador de Orçamento - Marcos Aparecido</title>
     <link rel="stylesheet" href="style.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
@@ -11,27 +11,33 @@
 <body>
     <div class="container">
         <header>
-            <h1>Gerador de Orçamento Profissional</h1>
-            <p>Preencha os dados abaixo para gerar o PDF</p>
+            <h2>MARCOS APARECIDO RODRIGUES</h2>
+            <p>Avenida XV de Novembro, 1565 - São Carlos do Ivaí - PR</p>
+            <p>Bairro: Conjunto Bela Vista - Fone: (44) 99723-1252</p>
         </header>
 
-        <section class="form-section">
-            <div class="card">
-                <h3>Dados do Cliente</h3>
-                <div class="input-group">
-                    <input type="text" id="nomeCliente" placeholder="Nome do Cliente" value="ERCILIO DE OLIVEIRA">
-                    <input type="text" id="enderecoCliente" placeholder="Endereço Completo" value="RUA SURUCUA, 23 Q1 - PARAÍSO DO NORTE - PR">
-                </div>
+        <section class="card">
+            <h3>Dados do Cliente</h3>
+            <div class="grid-form">
+                <input type="text" id="nomeCliente" placeholder="Nome do Cliente" value="ERCILIO DE OLIVEIRA">
+                <input type="text" id="cpfCnpj" placeholder="CPF/CNPJ">
+                <input type="text" id="rgIe" placeholder="RG/IE">
+                <input type="text" id="celular" placeholder="Celular">
+                <input type="text" id="endereco" placeholder="Endereço" value="RUA SURUCUA, 23 Q1">
+                <input type="text" id="cep" placeholder="CEP" value="87780-000">
+                <input type="text" id="cidade" placeholder="Cidade" value="PARAÍSO DO NORTE - PR">
             </div>
+        </section>
 
-            <div class="card">
-                <h3>Itens do Orçamento</h3>
+        <section class="card">
+            <h3>Itens</h3>
+            <div class="table-responsive">
                 <table id="tabelaItens">
                     <thead>
                         <tr>
                             <th>Produto</th>
                             <th>Qtd</th>
-                            <th>Valor Unit. (R$)</th>
+                            <th>Valor Unit.</th>
                             <th>Ação</th>
                         </tr>
                     </thead>
@@ -40,19 +46,34 @@
                             <td><input type="text" value="Postes Normais"></td>
                             <td><input type="number" value="58" oninput="calcularTotal()"></td>
                             <td><input type="number" value="50.00" oninput="calcularTotal()"></td>
-                            <td><button onclick="removerLinha(this)">-</button></td>
+                            <td><button onclick="this.parentElement.parentElement.remove(); calcularTotal();">×</button></td>
                         </tr>
                     </tbody>
                 </table>
-                <button class="btn-add" onclick="adicionarLinha()">+ Adicionar Produto</button>
             </div>
-
-            <div class="total-box">
-                <h2>Total: R$ <span id="valorTotal">0,00</span></h2>
-            </div>
-
-            <button class="btn-generate" onclick="gerarPDF()">Gerar PDF Profissional</button>
+            <button class="btn-add" onclick="adicionarLinha()">+ Adicionar Item</button>
         </section>
+
+        <section class="card">
+            <h3>Pagamento e Adicionais</h3>
+            <div class="checkbox-group">
+                <label><input type="checkbox" name="pagamento" value="PIX"> PIX</label>
+                <label><input type="checkbox" name="pagamento" value="Dinheiro"> Dinheiro</label>
+                <label><input type="checkbox" name="pagamento" value="C. Crédito"> Cartão Crédito</label>
+                <label><input type="checkbox" name="pagamento" value="C. Débito"> Cartão Débito</label>
+            </div>
+            <div class="grid-form financeiro">
+                <label>Frete (+): <input type="number" id="frete" value="0" oninput="calcularTotal()"></label>
+                <label>Desconto (-): <input type="number" id="desconto" value="0" oninput="calcularTotal()"></label>
+            </div>
+        </section>
+
+        <div class="total-display">
+            <p>Sub-total: R$ <span id="subtotal">0,00</span></p>
+            <h3>Total: R$ <span id="valorTotal">0,00</span></h3>
+        </div>
+
+        <button class="btn-generate" onclick="gerarPDF()">Gerar PDF e Salvar</button>
     </div>
     <script src="script.js"></script>
 </body>
