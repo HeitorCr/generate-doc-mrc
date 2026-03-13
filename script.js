@@ -1,27 +1,53 @@
 function adicionarLinha() {
     const corpo = document.getElementById('corpoTabela');
-    corpo.insertAdjacentHTML('beforeend', `<tr>
-        <td><input type="text" placeholder="Produto"></td>
-        <td><input type="number" value="1" oninput="calcularTotal()"></td>
-        <td><input type="number" value="0" oninput="calcularTotal()"></td>
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+        <td><input type="text" placeholder="Ex: Poste" onblur="calcularTotal()"></td>
+        <td><input type="number" value="1" style="width: 50px" onchange="calcularTotal()"></td>
+        <td><input type="text" class="money-item" placeholder="0,00" onblur="calcularTotal()"></td>
         <td><button onclick="this.parentElement.parentElement.remove(); calcularTotal();">×</button></td>
-    </tr>`);
+    `;
+    corpo.appendChild(tr);
+    // Aplica máscara no campo de valor que acabou de ser criado
+    IMask(tr.querySelector('.money-item'), maskOptions.money);
+}
+
+function parseMoeda(valor) {
+    return Number(valor.replace('R$', '').replace(/\./g, '').replace(',', '.')) || 0;
 }
 
 function calcularTotal() {
     let subtotal = 0;
     document.querySelectorAll('#corpoTabela tr').forEach(linha => {
         const inputs = linha.querySelectorAll('input');
-        subtotal += (Number(inputs[1].value) * Number(inputs[2].value));
+        const qtd = Number(inputs[1].value);
+        const valor = parseMoeda(inputs[2].value);
+        subtotal += (qtd * valor);
     });
-    
-    const frete = Number(document.getElementById('frete').value);
-    const desconto = Number(document.getElementById('desconto').value);
+
+    const frete = parseMoeda(document.getElementById('frete').value);
+    const desconto = parseMoeda(document.getElementById('desconto').value);
     const total = subtotal + frete - desconto;
 
-    document.getElementById('subtotal').innerText = subtotal.toLocaleString('pt-BR', {minimumFractionDigits: 2});
-    document.getElementById('valorTotal').innerText = total.toLocaleString('pt-BR', {minimumFractionDigits: 2});
+    document.getElementById('subtotalDisplay').innerText = subtotal.toLocaleString('pt-BR', {minimumFractionDigits: 2});
+    document.getElementById('totalDisplay').innerText = total.toLocaleString('pt-BR', {minimumFractionDigits: 2});
 }
+
+const maskOptions = {
+    cpfCnpj: { mask: [{ mask: '000.000.000-00' }, { mask: '00.000.000/0000-00' }] },
+    celular: { mask: '(00) 00000-0000' },
+    cep: { mask: '00000-000' },
+    money: {
+        mask: 'R$ num',
+        blocks: { num: { mask: Number, scale: 2, thousandsSeparator: '.', padFractionalZeros: true, radix: ',' } }
+    }
+};
+
+// Aplica as máscaras nos campos que já existem na página
+document.querySelectorAll('input').forEach(input => {
+    if (maskOptions[input.id]) IMask(input, maskOptions[input.id]);
+    if (input.classList.contains('money')) IMask(input, maskOptions.money);
+});
 
 function gerarPDF() {
     const { jsPDF } = window.jspdf;
@@ -75,4 +101,5 @@ function gerarPDF() {
 
     doc.save(`Orcamento_${document.getElementById('nomeCliente').value}.pdf`);
 }
+
 calcularTotal();

@@ -3,77 +3,98 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gerador de Orçamento - Marcos Aparecido</title>
+    <title>Gerador de Orçamento Profissional</title>
     <link rel="stylesheet" href="style.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
+    <script src="https://unpkg.com/imask"></script>
 </head>
 <body>
     <div class="container">
-        <header>
-            <h2>MARCOS APARECIDO RODRIGUES</h2>
-            <p>Avenida XV de Novembro, 1565 - São Carlos do Ivaí - PR</p>
-            <p>Bairro: Conjunto Bela Vista - Fone: (44) 99723-1252</p>
+        <header class="main-header">
+            <h1>MARCOS APARECIDO RODRIGUES</h1>
+            <p>Avenida XV de Novembro, 1565 - São Carlos do Ivaí - PR [cite: 9]</p>
+            <p>Bairro: Conjunto Bela Vista - Fone: (44) 99723-1252 [cite: 10, 11]</p>
         </header>
 
-        <section class="card">
-            <h3>Dados do Cliente</h3>
-            <div class="grid-form">
-                <input type="text" id="nomeCliente" placeholder="Nome do Cliente" value="ERCILIO DE OLIVEIRA">
-                <input type="text" id="cpfCnpj" placeholder="CPF/CNPJ">
-                <input type="text" id="rgIe" placeholder="RG/IE">
-                <input type="text" id="celular" placeholder="Celular">
-                <input type="text" id="endereco" placeholder="Endereço" value="RUA SURUCUA, 23 Q1">
-                <input type="text" id="cep" placeholder="CEP" value="87780-000">
-                <input type="text" id="cidade" placeholder="Cidade" value="PARAÍSO DO NORTE - PR">
-            </div>
-        </section>
+        <main class="content">
+            <section class="card">
+                <div class="card-header"><h3>Dados do Cliente</h3></div>
+                <div class="form-grid">
+                    <div class="input-box full">
+                        <label>Cliente</label>
+                        <input type="text" id="nomeCliente" placeholder="Nome Completo">
+                    </div>
+                    <div class="input-box">
+                        <label>CPF/CNPJ</label>
+                        <input type="text" id="cpfCnpj" placeholder="000.000.000-00">
+                    </div>
+                    <div class="input-box">
+                        <label>Celular</label>
+                        <input type="text" id="celular" placeholder="(00) 00000-0000">
+                    </div>
+                    <div class="input-box full">
+                        <label>Endereço</label>
+                        <input type="text" id="endereco" placeholder="Rua, Número, Bairro">
+                    </div>
+                    <div class="input-box">
+                        <label>CEP</label>
+                        <input type="text" id="cep" placeholder="00000-000">
+                    </div>
+                    <div class="input-box">
+                        <label>Cidade</label>
+                        <input type="text" id="cidade" placeholder="Cidade - UF">
+                    </div>
+                </div>
+            </section>
 
-        <section class="card">
-            <h3>Itens</h3>
-            <div class="table-responsive">
-                <table id="tabelaItens">
-                    <thead>
-                        <tr>
-                            <th>Produto</th>
-                            <th>Qtd</th>
-                            <th>Valor Unit.</th>
-                            <th>Ação</th>
-                        </tr>
-                    </thead>
-                    <tbody id="corpoTabela">
-                        <tr>
-                            <td><input type="text" value="Postes Normais"></td>
-                            <td><input type="number" value="58" oninput="calcularTotal()"></td>
-                            <td><input type="number" value="50.00" oninput="calcularTotal()"></td>
-                            <td><button onclick="this.parentElement.parentElement.remove(); calcularTotal();">×</button></td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-            <button class="btn-add" onclick="adicionarLinha()">+ Adicionar Item</button>
-        </section>
+            <section class="card">
+                <div class="card-header"><h3>Itens do Orçamento</h3></div>
+                <div class="table-wrapper">
+                    <table id="tabelaItens">
+                        <thead>
+                            <tr>
+                                <th style="width: 50%;">Produto</th>
+                                <th>Qtd</th>
+                                <th>Unitário</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody id="corpoTabela">
+                            </tbody>
+                    </table>
+                </div>
+                <button class="btn-secondary" onclick="adicionarLinha()">+ Adicionar Item</button>
+            </section>
 
-        <section class="card">
-            <h3>Pagamento e Adicionais</h3>
-            <div class="checkbox-group">
-                <label><input type="checkbox" name="pagamento" value="PIX"> PIX</label>
-                <label><input type="checkbox" name="pagamento" value="Dinheiro"> Dinheiro</label>
-                <label><input type="checkbox" name="pagamento" value="C. Crédito"> Cartão Crédito</label>
-                <label><input type="checkbox" name="pagamento" value="C. Débito"> Cartão Débito</label>
-            </div>
-            <div class="grid-form financeiro">
-                <label>Frete (+): <input type="number" id="frete" value="0" oninput="calcularTotal()"></label>
-                <label>Desconto (-): <input type="number" id="desconto" value="0" oninput="calcularTotal()"></label>
-            </div>
-        </section>
+            <section class="card">
+                <div class="card-header"><h3>Pagamento e Ajustes</h3></div>
+                <div class="payment-options">
+                    <label class="check-container">PIX <input type="checkbox" name="pagamento" value="PIX"><span class="checkmark"></span></label>
+                    <label class="check-container">Dinheiro <input type="checkbox" name="pagamento" value="Dinheiro"><span class="checkmark"></span></label>
+                    <label class="check-container">Crédito <input type="checkbox" name="pagamento" value="Cartão de Crédito"><span class="checkmark"></span></label>
+                    <label class="check-container">Débito <input type="checkbox" name="pagamento" value="Cartão de Débito"><span class="checkmark"></span></label>
+                </div>
+                <div class="form-grid extra-costs">
+                    <div class="input-box">
+                        <label>Frete (+)</label>
+                        <input type="text" id="frete" class="money" value="0,00">
+                    </div>
+                    <div class="input-box">
+                        <label>Desconto (-)</label>
+                        <input type="text" id="desconto" class="money" value="0,00">
+                    </div>
+                </div>
+            </section>
+        </main>
 
-        <div class="total-display">
-            <p>Sub-total: R$ <span id="subtotal">0,00</span></p>
-            <h3>Total: R$ <span id="valorTotal">0,00</span></h3>
-        </div>
-
-        <button class="btn-generate" onclick="gerarPDF()">Gerar PDF e Salvar</button>
+        <footer class="sticky-footer">
+            <div class="totals">
+                <span>Sub-total: R$ <strong id="subtotalDisplay">0,00</strong></span>
+                <span>Total: R$ <strong id="totalDisplay">0,00</strong></span>
+            </div>
+            <button class="btn-primary" onclick="gerarPDF()">Gerar Orçamento PDF</button>
+        </footer>
     </div>
     <script src="script.js"></script>
 </body>
