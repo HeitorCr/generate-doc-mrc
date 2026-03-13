@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerador de Orçamentos - Marcos Aparecido</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Gerador de Orçamento Profissional</h1>
+            <p>Preencha os dados abaixo para gerar o PDF</p>
+        </header>
+
+        <section class="form-section">
+            <div class="card">
+                <h3>Dados do Cliente</h3>
+                <div class="input-group">
+                    <input type="text" id="nomeCliente" placeholder="Nome do Cliente" value="ERCILIO DE OLIVEIRA">
+                    <input type="text" id="enderecoCliente" placeholder="Endereço Completo" value="RUA SURUCUA, 23 Q1 - PARAÍSO DO NORTE - PR">
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>Itens do Orçamento</h3>
+                <table id="tabelaItens">
+                    <thead>
+                        <tr>
+                            <th>Produto</th>
+                            <th>Qtd</th>
+                            <th>Valor Unit. (R$)</th>
+                            <th>Ação</th>
+                        </tr>
+                    </thead>
+                    <tbody id="corpoTabela">
+                        <tr>
+                            <td><input type="text" value="Postes Normais"></td>
+                            <td><input type="number" value="58" oninput="calcularTotal()"></td>
+                            <td><input type="number" value="50.00" oninput="calcularTotal()"></td>
+                            <td><button onclick="removerLinha(this)">-</button></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <button class="btn-add" onclick="adicionarLinha()">+ Adicionar Produto</button>
+            </div>
+
+            <div class="total-box">
+                <h2>Total: R$ <span id="valorTotal">0,00</span></h2>
+            </div>
+
+            <button class="btn-generate" onclick="gerarPDF()">Gerar PDF Profissional</button>
+        </section>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
