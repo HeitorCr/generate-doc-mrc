@@ -3,97 +3,72 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gerador de Orçamento Profissional</title>
+    <title>Gerador de Orçamento - Marcos Aparecido</title>
     <link rel="stylesheet" href="style.css">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
     <script src="https://unpkg.com/imask"></script>
 </head>
 <body>
-    <div class="container">
-        <header class="main-header">
-            <h1>MARCOS APARECIDO RODRIGUES</h1>
-            <p>Avenida XV de Novembro, 1565 - São Carlos do Ivaí - PR [cite: 9]</p>
-            <p>Bairro: Conjunto Bela Vista - Fone: (44) 99723-1252 [cite: 10, 11]</p>
+    <div class="container compact">
+        <header class="mini-header">
+            <h2>MARCOS APARECIDO RODRIGUES</h2>
+            <p>Avenida XV de Novembro, 1565 - São Carlos do Ivaí - PR</p>
+            <p>Bairro: Conjunto Bela Vista - Fone: (44) 99723-1252</p>
         </header>
 
-        <main class="content">
-            <section class="card">
-                <div class="card-header"><h3>Dados do Cliente</h3></div>
-                <div class="form-grid">
-                    <div class="input-box full">
-                        <label>Cliente</label>
-                        <input type="text" id="nomeCliente" placeholder="Nome Completo">
-                    </div>
-                    <div class="input-box">
-                        <label>CPF/CNPJ</label>
-                        <input type="text" id="cpfCnpj" placeholder="000.000.000-00">
-                    </div>
-                    <div class="input-box">
-                        <label>Celular</label>
-                        <input type="text" id="celular" placeholder="(00) 00000-0000">
-                    </div>
-                    <div class="input-box full">
-                        <label>Endereço</label>
-                        <input type="text" id="endereco" placeholder="Rua, Número, Bairro">
-                    </div>
-                    <div class="input-box">
-                        <label>CEP</label>
-                        <input type="text" id="cep" placeholder="00000-000">
-                    </div>
-                    <div class="input-box">
-                        <label>Cidade</label>
-                        <input type="text" id="cidade" placeholder="Cidade - UF">
-                    </div>
-                </div>
-            </section>
-
-            <section class="card">
-                <div class="card-header"><h3>Itens do Orçamento</h3></div>
-                <div class="table-wrapper">
-                    <table id="tabelaItens">
-                        <thead>
-                            <tr>
-                                <th style="width: 50%;">Produto</th>
-                                <th>Qtd</th>
-                                <th>Unitário</th>
-                                <th></th>
-                            </tr>
-                        </thead>
-                        <tbody id="corpoTabela">
-                            </tbody>
-                    </table>
-                </div>
-                <button class="btn-secondary" onclick="adicionarLinha()">+ Adicionar Item</button>
-            </section>
-
-            <section class="card">
-                <div class="card-header"><h3>Pagamento e Ajustes</h3></div>
-                <div class="payment-options">
-                    <label class="check-container">PIX <input type="checkbox" name="pagamento" value="PIX"><span class="checkmark"></span></label>
-                    <label class="check-container">Dinheiro <input type="checkbox" name="pagamento" value="Dinheiro"><span class="checkmark"></span></label>
-                    <label class="check-container">Crédito <input type="checkbox" name="pagamento" value="Cartão de Crédito"><span class="checkmark"></span></label>
-                    <label class="check-container">Débito <input type="checkbox" name="pagamento" value="Cartão de Débito"><span class="checkmark"></span></label>
-                </div>
-                <div class="form-grid extra-costs">
-                    <div class="input-box">
-                        <label>Frete (+)</label>
-                        <input type="text" id="frete" class="money" value="0,00">
-                    </div>
-                    <div class="input-box">
-                        <label>Desconto (-)</label>
-                        <input type="text" id="desconto" class="money" value="0,00">
-                    </div>
-                </div>
-            </section>
-        </main>
-
-        <footer class="sticky-footer">
-            <div class="totals">
-                <span>Sub-total: R$ <strong id="subtotalDisplay">0,00</strong></span>
-                <span>Total: R$ <strong id="totalDisplay">0,00</strong></span>
+        <div class="form-row">
+            <div class="input-group flex-2">
+                <label>Cliente</label>
+                <input type="text" id="nomeCliente" placeholder="Nome do cliente">
             </div>
-            <button class="btn-primary" onclick="gerarPDF()">Gerar Orçamento PDF</button>
+            <div class="input-group flex-1">
+                <label>Cidade (PR)</label>
+                <select id="cidade" style="width: 100%"></select>
+            </div>
+        </div>
+
+        <section class="items-section">
+            <div class="section-header">
+                <span>Itens do Orçamento</span>
+                <button class="btn-sm" onclick="adicionarLinha()">+ Adicionar Item</button>
+            </div>
+            <div class="table-wrapper">
+                <table id="tabelaItens">
+                    <thead>
+                        <tr>
+                            <th style="width: 60%">PRODUTO</th>
+                            <th style="width: 15%">QTDE</th>
+                            <th style="width: 25%">VALOR</th>
+                        </tr>
+                    </thead>
+                    <tbody id="corpoTabela"></tbody>
+                </table>
+            </div>
+        </section>
+
+        <div class="bottom-grid">
+            <div class="input-group">
+                <label>Método de Pagamento</label>
+                <select id="metodoPagamento">
+                    <option value="PIX">PIX</option>
+                    <option value="Dinheiro">Dinheiro</option>
+                    <option value="Cartão de Crédito">Cartão de Crédito</option>
+                    <option value="Cartão de Débito">Cartão de Débito</option>
+                </select>
+            </div>
+            <div class="finances-row">
+                <input type="text" id="frete" class="money-sm" placeholder="Frete (+)" onblur="calcularTotal()">
+                <input type="text" id="desconto" class="money-sm" placeholder="Desconto (-)" onblur="calcularTotal()">
+            </div>
+        </div>
+
+        <footer class="action-bar">
+            <div class="total-label">Total: <span id="totalDisplay">R$ 0,00</span></div>
+            <button class="btn-main" onclick="gerarPDF()">Gerar Orçamento PDF</button>
         </footer>
     </div>
     <script src="script.js"></script>
